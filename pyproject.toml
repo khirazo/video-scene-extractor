@@ -1,0 +1,49 @@
+# This file includes AI-generated code - Review and modify as needed
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video-scene-extractor"
+version = "0.1.0"
+description = "Extract screenshots from training videos using scene detection and merge them into PDF"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["video", "scene-detection", "screenshot", "pdf", "training"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Office/Business",
+]
+
+dependencies = [
+    "scenedetect>=0.6.2",
+    "opencv-python>=4.8.0",
+    "Pillow>=10.0.0",
+    "img2pdf>=0.5.0",
+    "click>=8.1.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.65.0",
+]
+
+[project.scripts]
+video-scene-extractor = "video_scene_extractor.cli:main"
+
+# Note: This project is designed as a CLI tool for local use
+# PyPI publication is not planned
+
+[tool.setuptools.packages.find]
+where = ["src"]

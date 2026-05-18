@@ -1,0 +1,30 @@
+# Video Scene Extractor - Configuration Example for Presentation Slides
+# Optimized settings for extracting slides from presentation videos
+
+detection:
+  threshold: 20.0        # Higher threshold for slide transitions
+  min_scene_len: 20      # Longer minimum to avoid false detections
+  position: start        # Capture at slide start
+
+image:
+  format: png            # PNG for better quality
+  quality: 100           # Maximum quality
+  max_width: 1920
+  max_height: 1080
+
+pdf:
+  page_size: A4
+  orientation: landscape # Landscape for slides
+  add_timestamp: true
+  title: "Presentation Slides"
+  metadata:
+    author: "Your Name"
+    subject: "Extracted Presentation Slides"
+    keywords: "presentation, slides, training"
+
+output:
+  output_dir: ./slides
+  keep_images: true      # Keep images for review
+  verbose: true
+
+# Made with Bob

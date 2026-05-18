@@ -1,0 +1,30 @@
+# Video Scene Extractor - Configuration Example for Demo Videos
+# Optimized settings for capturing screen transitions in demo videos
+
+detection:
+  threshold: 12.0        # Lower threshold for subtle changes
+  min_scene_len: 15      # Standard minimum
+  position: middle       # Capture at scene middle for stability
+
+image:
+  format: jpg            # JPEG for smaller file size
+  quality: 90            # Good quality, smaller size
+  max_width: 1920
+  max_height: 1080
+
+pdf:
+  page_size: A4
+  orientation: landscape # Landscape for wide screen demos
+  add_timestamp: true
+  title: "Demo Screenshots"
+  metadata:
+    author: "Your Name"
+    subject: "Product Demo Screenshots"
+    keywords: "demo, product, screenshots"
+
+output:
+  output_dir: ./demo_frames
+  keep_images: false     # Don't keep images to save space
+  verbose: false
+
+# Made with Bob

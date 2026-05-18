@@ -1,0 +1,66 @@
+# Video Scene Extractor - Configuration Template
+# Copy this file to 'config.yaml' and customize as needed
+# Note: config.yaml is ignored by git to keep your settings private
+
+# Scene Detection Settings
+detection:
+  # Scene detection threshold (0-100)
+  # Higher values = detect only major changes
+  # Recommended: 15-20 for slides, 10-15 for demos
+  threshold: 17.0
+  
+  # Minimum scene length in frames
+  # Scenes shorter than this will be ignored
+  min_scene_len: 15
+  
+  # Frame extraction position within scene
+  # Options: start, middle, end
+  position: start
+
+# Image Settings
+image:
+  # Image format
+  # Options: jpg, png
+  format: jpg
+  
+  # JPEG quality (1-100)
+  # Higher quality recommended for slides (95+)
+  quality: 95
+  
+  # Maximum image dimensions (null = keep original size)
+  # Set these to reduce file size if needed
+  max_width: null
+  max_height: null
+
+# PDF Settings
+pdf:
+  # Page size
+  # Options: A4, Letter, A3, Legal
+  page_size: A4
+  
+  # Page orientation
+  # Options: portrait, landscape
+  orientation: landscape
+  
+  # Add timestamp to images
+  add_timestamp: true
+  
+  # PDF title (null = use video filename)
+  title: null
+  
+  # PDF metadata (optional)
+  metadata:
+    author: null
+    subject: "Video Scene Extraction"
+    keywords: "video, screenshot, training"
+
+# Output Settings
+output:
+  # Directory for extracted images
+  output_dir: ./frames
+  
+  # Keep images after PDF generation
+  keep_images: false
+  
+  # Enable verbose logging
+  verbose: false

@@ -1,0 +1,10 @@
+# This file includes AI-generated code - Review and modify as needed
+
+# Core dependencies
+scenedetect>=0.6.2
+opencv-python>=4.8.0
+Pillow>=10.0.0
+img2pdf>=0.5.0
+click>=8.1.0
+pyyaml>=6.0
+tqdm>=4.65.0
