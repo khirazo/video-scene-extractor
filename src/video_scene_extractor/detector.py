@@ -5,12 +5,11 @@ Scene detection module using PySceneDetect.
 """
 
 from dataclasses import dataclass
-from typing import List
 from pathlib import Path
+from typing import List
 
-from scenedetect import open_video, SceneManager
+from scenedetect import SceneManager, open_video
 from scenedetect.detectors import ContentDetector
-from scenedetect.scene_manager import save_images
 
 
 @dataclass
@@ -75,9 +74,6 @@ class SceneDetector:
         
         # Get scene list
         scene_list = scene_manager.get_scene_list()
-        
-        # Get video framerate for time calculations
-        fps = video.frame_rate
         
         # Convert to SceneInfo objects
         scenes = []

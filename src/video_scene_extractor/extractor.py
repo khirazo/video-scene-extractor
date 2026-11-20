@@ -5,8 +5,9 @@ Frame extraction module for extracting images from video scenes.
 """
 
 from dataclasses import dataclass
-from typing import List
 from pathlib import Path
+from typing import List
+
 import cv2
 from PIL import Image
 

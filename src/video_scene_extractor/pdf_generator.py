@@ -4,8 +4,9 @@
 PDF generation module for creating PDFs from extracted images.
 """
 
-from typing import List
 from pathlib import Path
+from typing import List
+
 import img2pdf
 from PIL import Image
 
@@ -134,7 +135,7 @@ class PDFGenerator:
         # Try to use a nice font, fall back to default if not available
         try:
             font = ImageFont.truetype("arial.ttf", 20)
-        except:
+        except OSError:
             font = ImageFont.load_default()
         
         # Calculate text position (bottom-right corner with padding)

@@ -73,4 +73,5 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Made with Bob
+# Local agent instructions
+AGENTS.local.md

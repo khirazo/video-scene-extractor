@@ -4,10 +4,11 @@
 Configuration management module for loading and validating settings.
 """
 
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-import sys
+
 import yaml
 
 

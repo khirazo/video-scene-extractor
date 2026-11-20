@@ -1,4 +1,4 @@
-# This file includes AI-generated code - Review and modify as needed
+﻿# This file includes AI-generated code - Review and modify as needed
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -39,6 +39,11 @@ dependencies = [
     "tqdm>=4.65.0",
 ]
 
+[dependency-groups]
+dev = [
+    "ruff>=0.17.1",
+]
+
 [project.scripts]
 video-scene-extractor = "video_scene_extractor.cli:main"
 
@@ -47,3 +52,9 @@ video-scene-extractor = "video_scene_extractor.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+[tool.ruff]
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

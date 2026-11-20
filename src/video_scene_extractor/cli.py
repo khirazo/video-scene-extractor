@@ -6,13 +6,14 @@ Command-line interface for video-scene-extractor.
 
 import sys
 from pathlib import Path
+
 import click
 from tqdm import tqdm
 
+from .config import load_config
 from .detector import SceneDetector
 from .extractor import FrameExtractor
 from .pdf_generator import PDFGenerator
-from .config import load_config, Config
 
 
 @click.command()
