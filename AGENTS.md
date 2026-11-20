@@ -1,4 +1,4 @@
-﻿# Development Guide
+# Development Guide
 
 ## Local Supplement
 
@@ -15,10 +15,10 @@ Add shared procedures, design decisions, and dependency information to this `AGE
 
 ## Dependencies and Execution
 
-- `pyproject.toml` is the source of truth for Python dependencies. `requirements.txt` is scheduled for removal when the uv migration is complete.
-- The standard commands after the uv migration are `uv sync`, `uv run video-scene-extractor --help`, and `uv run ruff check .`.
+- `pyproject.toml` is the source of truth for Python dependencies. Commit `uv.lock` and keep it in sync with `pyproject.toml`.
+- The standard commands are `uv sync`, `uv run video-scene-extractor --help`, `uv run ruff check .`, and the platform wrapper scripts.
 - Support both WSL and native Windows. Do not share virtual environments between operating systems; create one per environment.
-- The Bash-only `setup.sh` and `video-scene-extractor.sh` are compatibility helpers, not the standard entry points for new instructions.
+- The wrappers are `video-scene-extractor.ps1` for Windows PowerShell and `video-scene-extractor.sh` for Linux, macOS, and WSL. They prefer uv, then use an existing `.venv` or `venv`, then a local Python 3.10+ interpreter. On WSL, the shell wrapper defaults uv to `.venv-wsl` to avoid sharing the Windows `.venv`.
 
 ## Quality Checks
 

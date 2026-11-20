@@ -1,7 +1,6 @@
 # Video Scene Extractor
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 Extract screenshots from training videos using scene detection and merge them into PDF.
 
@@ -13,7 +12,7 @@ Extract screenshots from training videos using scene detection and merge them in
 - 📸 **Smart Screenshot Extraction**: Extracts frames only when significant changes occur
 - 📄 **PDF Generation**: Merges extracted images into a single PDF document
 - ⚙️ **Highly Configurable**: Flexible threshold and quality settings
-- 🖥️ **Cross-Platform**: Works on Windows (WSL), macOS, and Linux
+- 🖥️ **Cross-Platform**: Works on Windows (native and WSL), macOS, and Linux
 - 🚀 **CLI Interface**: Easy-to-use command-line interface
 
 ## Use Cases
@@ -27,74 +26,71 @@ Extract screenshots from training videos using scene detection and merge them in
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- FFmpeg
+- [uv](https://docs.astral.sh/uv/) (recommended), or Python 3.10+ for a non-uv environment
+- FFmpeg available on `PATH`
 
-#### Install FFmpeg
+Install FFmpeg using the package manager for your platform. On Windows, install a native Windows build and make sure `ffmpeg.exe` is available in the Windows `PATH`; the WSL installation is separate.
 
-**Ubuntu/Debian:**
-```bash
-sudo apt-get update
-sudo apt-get install ffmpeg
-```
+### Install the project
 
-**macOS:**
-```bash
-brew install ffmpeg
-```
+Clone the repository, change into its directory, and sync the project environment:
 
-**Windows (WSL):**
-```bash
-sudo apt-get update
-sudo apt-get install ffmpeg
-```
-
-### Installation
-
-#### Method 1: Using Setup Script (Recommended)
-
-```bash
+```sh
 git clone https://github.com/yourusername/video-scene-extractor.git
 cd video-scene-extractor
-./setup.sh
+uv sync
 ```
 
-The setup script will automatically:
-- Create a Python virtual environment
-- Install dependencies
-- Install the package
+This creates `.venv`, installs the project and its dependencies, and installs the development tools in the `dev` group. Keep separate environments for WSL and native Windows; do not share virtual environments between them.
 
-#### Method 2: Manual Installation
+When both systems use the same Windows-backed checkout, use the WSL wrapper (it selects `.venv-wsl`) or, before direct uv commands, run:
 
 ```bash
-git clone https://github.com/yourusername/video-scene-extractor.git
-cd video-scene-extractor
-python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-pip install -r requirements.txt
-pip install -e .
+export UV_PROJECT_ENVIRONMENT="$PWD/.venv-wsl"
+```
+
+When using an environment without `uv`, install the project and its dependencies into that interpreter first:
+
+**Windows PowerShell:**
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+```
+
+**Linux and macOS:**
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+```
+
+**WSL using the same Windows-backed checkout:**
+
+```bash
+python3 -m venv .venv-wsl
+.venv-wsl/bin/python -m pip install -e .
 ```
 
 ## Quick Start
 
-### Basic Usage
+Use the wrapper for your platform; it selects the runtime automatically.
 
-#### Using Wrapper Script (Recommended)
+**Windows PowerShell:**
 
-Extract screenshots from a video and create a PDF:
-
-```bash
-./video-scene-extractor.sh input_video.mp4
+```powershell
+.\video-scene-extractor.ps1 input_video.mp4
 ```
 
-#### Manually Activate Virtual Environment
+**Linux, macOS, and WSL:**
 
 ```bash
-source venv/bin/activate
-video-scene-extractor input_video.mp4
+bash video-scene-extractor.sh input_video.mp4
 ```
 
-**Note**: Using the wrapper script (`video-scene-extractor.sh`) automates virtual environment management.
+The wrapper prefers `uv`, then a project `.venv` or `venv`, and finally a local Python 3.10+ interpreter. Without `uv`, dependencies must already be installed in the selected environment. In WSL, the wrapper uses `.venv-wsl` by default so it does not reuse a Windows `.venv` when both systems access the same checkout.
+
+You can also invoke the CLI directly with `uv run video-scene-extractor ...`.
 
 This will:
 1. Detect scene changes in `input_video.mp4`
@@ -103,32 +99,37 @@ This will:
 
 ### Specify Output File
 
-```bash
-./video-scene-extractor.sh input_video.mp4 -o slides.pdf
+```sh
+uv run video-scene-extractor input_video.mp4 -o slides.pdf
 ```
 
 ### Adjust Detection Sensitivity
 
-```bash
+```sh
 # Higher threshold = detect only major changes (recommended for slides)
-./video-scene-extractor.sh input_video.mp4 -t 25.0
+uv run video-scene-extractor input_video.mp4 -t 25.0
 
 # Lower threshold = detect more subtle changes (for demos)
-./video-scene-extractor.sh input_video.mp4 -t 10.0
+uv run video-scene-extractor input_video.mp4 -t 10.0
 ```
 
 ### Keep Extracted Images
 
-```bash
-./video-scene-extractor.sh input_video.mp4 --keep-images --output-dir ./frames
+```sh
+uv run video-scene-extractor input_video.mp4 --keep-images --output-dir ./frames
 ```
 
 ### Portrait PDF for Documents
 
-```bash
-./video-scene-extractor.sh document.mp4 --orientation portrait --title "Documentation"
+```sh
+uv run video-scene-extractor document.mp4 --orientation portrait --title "Documentation"
 ```
 
+### Run Ruff
+
+```sh
+uv run ruff check .
+```
 ## Command-Line Options
 
 ```
@@ -286,10 +287,6 @@ video-scene-extractor presentation.mp4 \
   --max-height 1080
 ```
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - [PySceneDetect](https://github.com/Breakthrough/PySceneDetect) - Scene detection engine
@@ -342,8 +339,5 @@ A: All formats supported by FFmpeg (MP4, AVI, MOV, MKV, etc.).
 
 A: Depends on video length and resolution. Typically 5-10 minutes for a 1-hour video.
 
-**Q: Can I use this commercially?**
-
-A: Yes, under the MIT License.
 
 ---

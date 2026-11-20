@@ -354,7 +354,7 @@ def main(
             shutil.rmtree(output_dir)
         
         click.echo()
-        click.echo("✓ Done!")
+        click.echo("Done!")
         
     except FileNotFoundError as e:
         click.echo(f"Error: {e}", err=True)

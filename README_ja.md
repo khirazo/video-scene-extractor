@@ -1,7 +1,6 @@
 # Video Scene Extractor
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 研修動画やプレゼンテーション動画から、シーン変化を検出して重要な場面のスクリーンショットを自動抽出し、PDFにまとめるツールです。
 
@@ -27,108 +26,110 @@
 
 ### 前提条件
 
-- Python 3.8以上
-- FFmpeg
+- [uv](https://docs.astral.sh/uv/)（推奨）、または uv を使わない場合は Python 3.10 以上
+- `PATH` から実行できる FFmpeg
 
-#### FFmpegのインストール
+FFmpeg は各 OS のパッケージ管理方法でインストールしてください。Windows ネイティブでは Windows 用の FFmpeg を導入し、`ffmpeg.exe` を Windows の `PATH` に追加してください。WSL 内の FFmpeg とは別に設定が必要です。
 
-**Ubuntu/Debian:**
-```bash
-sudo apt-get update
-sudo apt-get install ffmpeg
-```
+### プロジェクトのインストール
 
-**macOS:**
-```bash
-brew install ffmpeg
-```
+リポジトリを取得し、プロジェクトディレクトリで環境を同期します。WSL と Windows ネイティブ（PowerShell）のどちらでも同じコマンドを使えます。
 
-**Windows (WSL):**
-```bash
-sudo apt-get update
-sudo apt-get install ffmpeg
-```
-
-### インストール
-
-#### 方法1: セットアップスクリプトを使用（推奨）
-
-```bash
+```sh
 git clone https://github.com/yourusername/video-scene-extractor.git
 cd video-scene-extractor
-./setup.sh
+uv sync
 ```
 
-セットアップスクリプトは以下を自動的に実行します：
-- Python仮想環境の作成
-- 依存関係のインストール
-- パッケージのインストール
+`.venv` が作成され、プロジェクト本体・依存関係・`dev` グループの開発ツールがインストールされます。WSL と Windows ネイティブで仮想環境を共有せず、それぞれの環境で `uv sync` を実行してください。
 
-#### 方法2: 手動インストール
+同じ Windows 上のチェックアウトを WSL と Windows の両方から使う場合、WSL ではラッパー（`.venv-wsl` を選択）を使ってください。直接 uv を実行する場合は、先に次を設定します。
 
 ```bash
-git clone https://github.com/yourusername/video-scene-extractor.git
-cd video-scene-extractor
-python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-pip install -r requirements.txt
-pip install -e .
+export UV_PROJECT_ENVIRONMENT="$PWD/.venv-wsl"
+```
+
+`uv` を使わない場合は、選択した Python 環境にプロジェクトと依存関係をインストールしてください。
+
+**Windows PowerShell:**
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+```
+
+**Linux、macOS:**
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+```
+
+**同じ Windows 上のチェックアウトを使う WSL:**
+
+```bash
+python3 -m venv .venv-wsl
+.venv-wsl/bin/python -m pip install -e .
 ```
 
 ## クイックスタート
 
-### 基本的な使い方
+OS に合わせたラッパーを使うと、実行環境を自動で選択します。
 
-#### ラッパースクリプトを使用（推奨）
+**Windows PowerShell:**
 
-動画からスクリーンショットを抽出してPDFを作成：
-
-```bash
-./video-scene-extractor.sh input_video.mp4
+```powershell
+.\video-scene-extractor.ps1 input_video.mp4
 ```
 
-#### 仮想環境を手動でアクティベート
+**Linux、macOS、WSL:**
 
 ```bash
-source venv/bin/activate
-video-scene-extractor input_video.mp4
+bash video-scene-extractor.sh input_video.mp4
 ```
 
-**注意**: ラッパースクリプト（`video-scene-extractor.sh`）を使用すると、仮想環境の管理が自動化されます。
+ラッパーは `uv` を最優先し、次にプロジェクト内の `.venv` または `venv`、最後にローカルの Python 3.10 以上を使います。`uv` を使わない場合、選択された環境に依存関係をあらかじめインストールしてください。WSL では、Windows と同じチェックアウトを使っても Windows 用 `.venv` を共有しないよう、既定で `.venv-wsl` を使います。
+
+CLI は `uv run video-scene-extractor ...` で直接実行することもできます。
 
 これにより：
-1. `input_video.mp4`のシーン変化を検出
-2. 各シーン変化時点でスクリーンショットを抽出
-3. すべてのスクリーンショットを含む`output.pdf`を作成
+1. `input_video.mp4` のシーン変化を検出
+2. 各シーン変化時点のスクリーンショットを抽出
+3. 画像を含む `output.pdf` を作成
 
 ### 出力ファイルを指定
 
-```bash
-./video-scene-extractor.sh input_video.mp4 -o slides.pdf
+```sh
+uv run video-scene-extractor input_video.mp4 -o slides.pdf
 ```
 
 ### 検出感度を調整
 
-```bash
-# 閾値を高く = 大きな変化のみ検出（スライド向け）
-./video-scene-extractor.sh input_video.mp4 -t 25.0
+```sh
+# 閾値を高くすると大きな変化のみ検出（スライド向け）
+uv run video-scene-extractor input_video.mp4 -t 25.0
 
-# 閾値を低く = より細かい変化も検出（デモ向け）
-./video-scene-extractor.sh input_video.mp4 -t 10.0
+# 閾値を低くすると細かな変化も検出（デモ向け）
+uv run video-scene-extractor input_video.mp4 -t 10.0
 ```
 
 ### 抽出した画像を保持
 
-```bash
-./video-scene-extractor.sh input_video.mp4 --keep-images --output-dir ./frames
+```sh
+uv run video-scene-extractor input_video.mp4 --keep-images --output-dir ./frames
 ```
 
-### ドキュメント用に縦向きPDF
+### ドキュメント用に縦向き PDF を作成
 
-```bash
-./video-scene-extractor.sh document.mp4 --orientation portrait --title "ドキュメント資料"
+```sh
+uv run video-scene-extractor document.mp4 --orientation portrait --title "ドキュメント資料"
 ```
 
+### Ruff チェック
+
+```sh
+uv run ruff check .
+```
 ## コマンドラインオプション
 
 ```
@@ -286,10 +287,6 @@ video-scene-extractor presentation.mp4 \
   --max-height 1080
 ```
 
-## ライセンス
-
-このプロジェクトはMITライセンスの下でライセンスされています - 詳細は[LICENSE](LICENSE)ファイルを参照してください。
-
 ## 謝辞
 
 - [PySceneDetect](https://github.com/Breakthrough/PySceneDetect) - シーン検出エンジン
@@ -342,9 +339,6 @@ A: FFmpegがサポートするすべてのフォーマット（MP4、AVI、MOV�
 
 A: 動画の長さと解像度によりますが、1時間の動画で5-10分程度が目安です。
 
-**Q: 商用利用は可能ですか？**
-
-A: はい、MITライセンスの下で商用利用が可能です。
 
 ---
 

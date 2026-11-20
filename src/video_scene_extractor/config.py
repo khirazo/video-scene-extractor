@@ -231,7 +231,7 @@ def load_config(config_path: str | Path | None = None) -> Config:
         ])
         
         # 2. Script/project root directory
-        # Try to find the project root (where video-scene-extractor.sh is located)
+        # Resolve the project root from the installed package location
         if getattr(sys, 'frozen', False):
             # Running as compiled executable
             script_dir = Path(sys.executable).parent
