@@ -49,6 +49,32 @@ uv sync
 export UV_PROJECT_ENVIRONMENT="$PWD/.venv-wsl"
 ```
 
+### 同じチェックアウトを Windows と WSL から使う場合
+
+Python の仮想環境は OS ごとに異なります。同じ Windows ファイルシステム上のチェックアウトを共有している場合でも、Windows ネイティブと WSL で 1 つの `.venv` を共用しないでください。Windows ネイティブでは `.venv`、WSL では `.venv-wsl` を使用します。
+
+両方の環境で `.venv` を使うと、`uv` が別のプラットフォームで作成された仮想環境を検出することがあります。実行するコマンド、uv のバージョン、実行側のプラットフォームによっては、uv が仮想環境を再作成する場合もあれば、置き換えずにエラーで停止する場合もあります。その結果、もう一方の環境から次に起動したときに失敗することがあります。
+
+この問題を避けるには、付属のラッパーを使用してください。`video-scene-extractor.ps1` は Windows で `.venv` を使用し、`video-scene-extractor.sh` は WSL で実行すると `.venv-wsl` を使用します。WSL で `uv` を直接実行する場合は、上記のとおり `UV_PROJECT_ENVIRONMENT` を設定してください。直接 `uv` を使うことが多い場合は、この変数を WSL のシェル設定に追加してください。
+
+互換性のない仮想環境から復旧するには、現在使用している OS 側の仮想環境だけを削除してから、uv に再作成させます。
+
+**Windows PowerShell:**
+
+```powershell
+Remove-Item -Recurse -Force .venv
+uv sync
+```
+
+**WSL:**
+
+```bash
+rm -rf .venv-wsl
+UV_PROJECT_ENVIRONMENT=.venv-wsl uv sync
+```
+
+もう一方の OS 用の仮想環境は、その環境でも再構築する場合以外は削除しないでください。
+
 `uv` を使わない場合は、選択した Python 環境にプロジェクトと依存関係をインストールしてください。
 
 **Windows PowerShell:**

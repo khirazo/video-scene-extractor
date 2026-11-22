@@ -49,6 +49,32 @@ When both systems use the same Windows-backed checkout, use the WSL wrapper (it 
 export UV_PROJECT_ENVIRONMENT="$PWD/.venv-wsl"
 ```
 
+### Using the same checkout from Windows and WSL
+
+Python virtual environments are operating-system-specific. Do not use one `.venv` from both native Windows and WSL, even when both access the same checkout on the Windows filesystem. Use `.venv` for native Windows and `.venv-wsl` for WSL instead.
+
+If both systems use `.venv`, `uv` can detect that the environment was created for a different platform. Depending on the command, uv version, and host platform, uv may recreate the environment or stop with an error rather than replacing it. This can make the next launch from the other system fail.
+
+To avoid this issue, use the supplied wrappers: `video-scene-extractor.ps1` uses `.venv` on Windows, and `video-scene-extractor.sh` uses `.venv-wsl` when run in WSL. For direct WSL `uv` commands, set `UV_PROJECT_ENVIRONMENT` as shown above. Keep that variable in your WSL shell configuration if you use direct `uv` commands regularly.
+
+To recover from an incompatible environment, remove only the environment for the system you are currently using, then let uv create it again:
+
+**Windows PowerShell:**
+
+```powershell
+Remove-Item -Recurse -Force .venv
+uv sync
+```
+
+**WSL:**
+
+```bash
+rm -rf .venv-wsl
+UV_PROJECT_ENVIRONMENT=.venv-wsl uv sync
+```
+
+Do not remove the other system's environment unless you intend to rebuild it there as well.
+
 When using an environment without `uv`, install the project and its dependencies into that interpreter first:
 
 **Windows PowerShell:**
