@@ -120,13 +120,14 @@ class Config:
         output_data = data.get("output", {})
         
         # Handle PDF metadata separately
-        pdf_metadata_data = pdf_data.pop("metadata", {})
+        pdf_metadata_data = pdf_data.get("metadata", {})
+        pdf_options = {key: value for key, value in pdf_data.items() if key != "metadata"}
         pdf_metadata = PDFMetadata(**pdf_metadata_data)
         
         config = cls(
             detection=DetectionConfig(**detection_data),
             image=ImageConfig(**image_data),
-            pdf=PDFConfig(**pdf_data, metadata=pdf_metadata),
+            pdf=PDFConfig(**pdf_options, metadata=pdf_metadata),
             output=OutputConfig(**output_data)
         )
         

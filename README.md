@@ -156,6 +156,12 @@ uv run video-scene-extractor document.mp4 --orientation portrait --title "Docume
 ```sh
 uv run ruff check .
 ```
+
+### Run Unit Tests
+
+```sh
+uv run pytest
+```
 ## Command-Line Options
 
 ```

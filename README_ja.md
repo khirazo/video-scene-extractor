@@ -156,6 +156,12 @@ uv run video-scene-extractor document.mp4 --orientation portrait --title "ドキ
 ```sh
 uv run ruff check .
 ```
+
+### ユニットテストの実行
+
+```sh
+uv run pytest
+```
 ## コマンドラインオプション
 
 ```
