@@ -145,6 +145,16 @@ uv run video-scene-extractor input_video.mp4 -t 10.0
 uv run video-scene-extractor input_video.mp4 --keep-images --output-dir ./frames
 ```
 
+### 入力動画と同じフォルダーに出力
+
+`--output-relative-to-video` を付けると、相対指定した `-o` と `--output-dir` は入力動画があるフォルダーを基準に解釈されます。絶対パスは変更されません。
+
+```sh
+uv run video-scene-extractor videos/training.mp4 -o scenes.pdf --keep-images --output-dir frames --output-relative-to-video
+```
+
+この例では、`videos/scenes.pdf` と `videos/frames` が作成されます。
+
 ### ドキュメント用に縦向き PDF を作成
 
 ```sh
@@ -173,6 +183,8 @@ Arguments:
 Output Options:
   -o, --output PATH        Output PDF file path [default: output.pdf]
   --output-dir PATH        Image output directory [default: ./frames]
+  --output-relative-to-video
+                            Resolve relative output paths from the input video directory
   --keep-images            Keep images after PDF generation
 
 Scene Detection Options:
@@ -232,6 +244,7 @@ pdf:
 
 output:
   output_dir: ./frames   # 抽出画像の保存ディレクトリ
+  relative_to_video: false # 相対出力パスを入力動画のフォルダー基準で解釈
   keep_images: false     # PDF生成後も画像を保持
   verbose: false         # 詳細ログを有効化
 ```

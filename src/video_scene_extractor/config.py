@@ -79,6 +79,7 @@ class PDFConfig:
 class OutputConfig:
     """Output configuration."""
     output_dir: str = "./frames"
+    relative_to_video: bool = False
     keep_images: bool = False
     verbose: bool = False
     
@@ -200,6 +201,7 @@ class Config:
             },
             "output": {
                 "output_dir": self.output.output_dir,
+                "relative_to_video": self.output.relative_to_video,
                 "keep_images": self.output.keep_images,
                 "verbose": self.output.verbose,
             },

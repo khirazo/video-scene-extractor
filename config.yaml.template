@@ -58,6 +58,9 @@ pdf:
 output:
   # Directory for extracted images
   output_dir: ./frames
+
+  # Resolve relative output PDF and image paths from the input video's directory
+  relative_to_video: false
   
   # Keep images after PDF generation
   keep_images: false

@@ -145,6 +145,16 @@ uv run video-scene-extractor input_video.mp4 -t 10.0
 uv run video-scene-extractor input_video.mp4 --keep-images --output-dir ./frames
 ```
 
+### Store Outputs Next to the Input Video
+
+Use `--output-relative-to-video` to resolve relative `-o` and `--output-dir` paths from the input video's directory. Absolute paths are unchanged.
+
+```sh
+uv run video-scene-extractor videos/training.mp4 -o scenes.pdf --keep-images --output-dir frames --output-relative-to-video
+```
+
+This creates `videos/scenes.pdf` and retains images in `videos/frames`.
+
 ### Portrait PDF for Documents
 
 ```sh
@@ -173,6 +183,8 @@ Arguments:
 Output Options:
   -o, --output PATH        Output PDF file path [default: output.pdf]
   --output-dir PATH        Image output directory [default: ./frames]
+  --output-relative-to-video
+                            Resolve relative output paths from the input video directory
   --keep-images            Keep images after PDF generation
 
 Scene Detection Options:
@@ -232,6 +244,7 @@ pdf:
 
 output:
   output_dir: ./frames   # Directory for extracted images
+  relative_to_video: false # Resolve relative output paths from the input video directory
   keep_images: false     # Keep images after PDF generation
   verbose: false         # Enable verbose logging
 ```

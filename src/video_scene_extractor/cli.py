@@ -16,6 +16,12 @@ from .extractor import FrameExtractor
 from .pdf_generator import PDFGenerator
 
 
+def _resolve_relative_path(path: str, base_dir: Path) -> Path:
+    """Resolve a relative path from the supplied base directory."""
+    path_obj = Path(path)
+    return path_obj if path_obj.is_absolute() else base_dir / path_obj
+
+
 @click.command()
 @click.argument('input_video', type=click.Path(exists=True))
 @click.option(
@@ -32,6 +38,12 @@ from .pdf_generator import PDFGenerator
     '--output-dir',
     default=None,
     help='Image output directory [default: ./frames]'
+)
+@click.option(
+    '--output-relative-to-video',
+    is_flag=True,
+    default=None,
+    help='Resolve relative output paths from the input video directory'
 )
 @click.option(
     '--keep-images',
@@ -117,6 +129,7 @@ def main(
     config,
     output,
     output_dir,
+    output_relative_to_video,
     keep_images,
     threshold,
     min_scene_len,
@@ -235,6 +248,12 @@ def main(
         else:
             output_dir = cfg.output.output_dir
             param_sources['output_dir'] = config_source
+
+        if output_relative_to_video is not None:
+            param_sources['output_relative_to_video'] = 'CLI'
+        else:
+            output_relative_to_video = cfg.output.relative_to_video
+            param_sources['output_relative_to_video'] = config_source
             
         if keep_images is not None:
             param_sources['keep_images'] = 'CLI'
@@ -248,6 +267,11 @@ def main(
             verbose = cfg.output.verbose
             param_sources['verbose'] = config_source
         
+        if output_relative_to_video:
+            video_dir = Path(input_video).resolve().parent
+            output = str(_resolve_relative_path(output, video_dir))
+            output_dir = str(_resolve_relative_path(output_dir, video_dir))
+
         # Always print configuration summary
         click.echo("=" * 60)
         click.echo("Configuration Summary")
@@ -275,6 +299,11 @@ def main(
         click.echo(f"  Add timestamp: {add_timestamp} (source: {param_sources['add_timestamp']})")
         click.echo()
         click.echo("Output Settings:")
+        click.echo(
+            "  Resolve paths from video: "
+            f"{output_relative_to_video} "
+            f"(source: {param_sources['output_relative_to_video']})"
+        )
         click.echo(f"  Keep images: {keep_images} (source: {param_sources['keep_images']})")
         click.echo(f"  Verbose: {verbose} (source: {param_sources['verbose']})")
         click.echo("=" * 60)

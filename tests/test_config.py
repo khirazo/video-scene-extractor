@@ -15,7 +15,12 @@ def test_config_from_dict_round_trips_and_preserves_input():
             "title": "Training",
             "metadata": {"author": "Example Author"},
         },
-        "output": {"output_dir": "captures", "keep_images": True, "verbose": True},
+        "output": {
+            "output_dir": "captures",
+            "relative_to_video": True,
+            "keep_images": True,
+            "verbose": True,
+        },
     }
     original_data = deepcopy(data)
 
@@ -35,7 +40,12 @@ def test_config_from_dict_round_trips_and_preserves_input():
                 "keywords": "video, screenshot, training",
             },
         },
-        "output": {"output_dir": "captures", "keep_images": True, "verbose": True},
+        "output": {
+            "output_dir": "captures",
+            "relative_to_video": True,
+            "keep_images": True,
+            "verbose": True,
+        },
     }
     assert data == original_data
 
